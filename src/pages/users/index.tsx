@@ -21,7 +21,7 @@ import { Pagination } from "../../components/Pagination";
 
 export default function UserList() {
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
-  
+
   return (
     <Flex h="100vh" direction="column">
       <Header />
@@ -70,7 +70,7 @@ export default function UserList() {
                     </Text>
                   </Box>
                 </Td>
-                {isWideVersion && <Th>Data de cadastro</Th>}
+                {isWideVersion && <Td>03 de dezembro, 2023</Td>}
                 <Td>
                   <Button
                     as="a"
@@ -78,9 +78,7 @@ export default function UserList() {
                     fontSize="sm"
                     colorScheme="purple"
                     leftIcon={<Icon as={RiEditLine} fontSize="16" />}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    iconSpacing={!isWideVersion ? 0 : 2}
                   >
                     {isWideVersion && "Editar"}
                   </Button>
@@ -98,7 +96,7 @@ export default function UserList() {
                     </Text>
                   </Box>
                 </Td>
-                {isWideVersion && <Th>Data de cadastro</Th>}
+                {isWideVersion && <Td>03 de dezembro, 2023</Td>}
                 <Td>
                   <Button
                     as="a"
@@ -106,6 +104,7 @@ export default function UserList() {
                     fontSize="sm"
                     colorScheme="purple"
                     leftIcon={<Icon as={RiEditLine} fontSize="16" />}
+                    iconSpacing={!isWideVersion ? 0 : 2}
                   >
                     {isWideVersion && "Editar"}
                   </Button>
@@ -123,7 +122,7 @@ export default function UserList() {
                     </Text>
                   </Box>
                 </Td>
-                {isWideVersion && <Th>Data de cadastro</Th>}
+                {isWideVersion && <Td>03 de dezembro, 2023</Td>}
                 <Td>
                   <Button
                     as="a"
@@ -131,6 +130,7 @@ export default function UserList() {
                     fontSize="sm"
                     colorScheme="purple"
                     leftIcon={<Icon as={RiEditLine} fontSize="16" />}
+                    iconSpacing={!isWideVersion ? 0 : 2}
                   >
                     {isWideVersion && "Editar"}
                   </Button>
