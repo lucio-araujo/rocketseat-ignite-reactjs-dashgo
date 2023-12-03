@@ -12,6 +12,7 @@ import {
   Th,
   Thead,
   Tr,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { RiAddLine, RiEditLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
@@ -19,6 +20,8 @@ import { Sidebar } from "../../components/Sidebar";
 import { Pagination } from "../../components/Pagination";
 
 export default function UserList() {
+  const isWideVersion = useBreakpointValue({ base: false, lg: true });
+  
   return (
     <Flex h="100vh" direction="column">
       <Header />
@@ -50,7 +53,7 @@ export default function UserList() {
                   <Checkbox colorScheme="pink" />
                 </Th>
                 <Th>Usuário</Th>
-                <Th>Data de cadastro</Th>
+                {isWideVersion && <Th>Data de cadastro</Th>}
                 <Th w="8"></Th>
               </Tr>
             </Thead>
@@ -67,7 +70,7 @@ export default function UserList() {
                     </Text>
                   </Box>
                 </Td>
-                <Td>03 de dezembro, 2023</Td>
+                {isWideVersion && <Th>Data de cadastro</Th>}
                 <Td>
                   <Button
                     as="a"
@@ -79,7 +82,7 @@ export default function UserList() {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    Editar
+                    {isWideVersion && "Editar"}
                   </Button>
                 </Td>
               </Tr>
@@ -95,7 +98,7 @@ export default function UserList() {
                     </Text>
                   </Box>
                 </Td>
-                <Td>03 de dezembro, 2023</Td>
+                {isWideVersion && <Th>Data de cadastro</Th>}
                 <Td>
                   <Button
                     as="a"
@@ -104,7 +107,7 @@ export default function UserList() {
                     colorScheme="purple"
                     leftIcon={<Icon as={RiEditLine} fontSize="16" />}
                   >
-                    Editar
+                    {isWideVersion && "Editar"}
                   </Button>
                 </Td>
               </Tr>
@@ -120,7 +123,7 @@ export default function UserList() {
                     </Text>
                   </Box>
                 </Td>
-                <Td>03 de dezembro, 2023</Td>
+                {isWideVersion && <Th>Data de cadastro</Th>}
                 <Td>
                   <Button
                     as="a"
@@ -129,7 +132,7 @@ export default function UserList() {
                     colorScheme="purple"
                     leftIcon={<Icon as={RiEditLine} fontSize="16" />}
                   >
-                    Editar
+                    {isWideVersion && "Editar"}
                   </Button>
                 </Td>
               </Tr>
