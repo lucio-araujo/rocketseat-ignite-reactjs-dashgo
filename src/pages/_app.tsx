@@ -3,16 +3,16 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "../styles/theme";
 
 import { SidebarDrawerProvider } from "../contexts/SidebarDrawerContext";
-import { QueryClientProvider, QueryClient } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { makeServer } from "../services/mirage";
 
 import { ReactQueryDevtools } from "react-query/devtools";
 
+import { queryCLient } from "../services/queryClient";
+
 if (process.env.NODE_ENV === "development") {
   makeServer();
 }
-
-const queryCLient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
