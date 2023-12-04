@@ -19,6 +19,12 @@ import { Sidebar } from "../../components/Sidebar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 
+import { useMutation } from "react-query";
+import { api } from "../../services/api";
+import { User } from "../../models/user";
+import { useRouter } from "next/router";
+import { queryCLient } from "../../services/queryClient";
+
 type CreateUserFormData = {
   name: string;
   email: string;
@@ -47,12 +53,32 @@ export default function CreateUser() {
     resolver: yupResolver(CreateUserFormSchema),
   });
 
+  const router = useRouter();
+
+  const createUser = useMutation(
+    async (user: CreateUserFormData) => {
+      const { data } = await api.post<{ user: User }, { data: User }>(
+        "/users",
+        {
+          user: { ...user, createdAt: new Date() },
+        }
+      );
+    },
+    {
+      onSuccess: async () => {
+        await queryCLient.invalidateQueries("users");
+        router.push("/users");
+      },
+    }
+  );
+
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (
     formData
   ) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    // console.log(formData);
 
-    console.log(formData);
+    await createUser.mutateAsync(formData);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { createServer, Factory, Model, Response, Server } from "miragejs";
+import { ActiveModelSerializer, createServer, Factory, Model, Response, Server } from "miragejs";
 import { User } from "../../models/user";
 import { faker } from "@faker-js/faker";
 
@@ -6,6 +6,9 @@ export function makeServer() {
   const server = createServer({
     models: {
       user: Model.extend<Partial<User>>({}),
+    },
+    serializers: {
+      application: ActiveModelSerializer,
     },
     factories: {
       user: Factory.extend({
