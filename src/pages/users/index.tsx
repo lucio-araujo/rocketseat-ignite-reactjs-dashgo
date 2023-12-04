@@ -26,7 +26,7 @@ import { User } from "@/models/user";
 import { useQuery } from "react-query";
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery<User[]>(
+  const { data, isLoading, isFetching, error } = useQuery<User[]>(
     "users",
     async () => {
       const response = await fetch("/api/users");
@@ -57,7 +57,10 @@ export default function UserList() {
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
-              Usuários
+              Usuários{" "}
+              {!isLoading && isFetching && (
+                <Spinner size="sm" color="gray.500" ml="4" />
+              )}
             </Heading>
             <Link legacyBehavior href="/users/create" passHref>
               <Button
