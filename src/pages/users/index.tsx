@@ -20,9 +20,20 @@ import { Sidebar } from "../../components/Sidebar";
 import { Pagination } from "../../components/Pagination";
 
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function UserList() {
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
+
+  useEffect(() => {
+    (async () => {
+      fetch("http://localhost:3000/api/users")
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+        });
+    })();
+  }, []);
 
   return (
     <Flex h="100vh" direction="column">
