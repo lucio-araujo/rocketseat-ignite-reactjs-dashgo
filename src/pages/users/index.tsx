@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -14,7 +15,7 @@ import {
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { RiAddLine, RiEditLine } from "react-icons/ri";
+import { RiAddLine, RiEditLine, RiPencilLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { Pagination } from "../../components/Pagination";
@@ -22,18 +23,16 @@ import { Pagination } from "../../components/Pagination";
 import Link from "next/link";
 import { useEffect } from "react";
 
-export default function UserList() {
-  const isWideVersion = useBreakpointValue({ base: false, lg: true });
+import { useQuery } from "react-query";
 
-  useEffect(() => {
-    (async () => {
-      fetch("http://localhost:3000/api/users")
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-        });
-    })();
-  }, []);
+export default function UserList() {
+  const { data, isLoading, error } = useQuery("users", async () => {
+    const response = await fetch("http://localhost:3000/api/users");
+    const data = await response.json();
+    return data;
+  });
+
+  const isWideVersion = useBreakpointValue({ base: false, lg: true });
 
   return (
     <Flex h="100vh" direction="column">
@@ -45,7 +44,7 @@ export default function UserList() {
             <Heading size="lg" fontWeight="normal">
               Usuários
             </Heading>
-            <Link href="/users/create" passHref>
+            <Link legacyBehavior href="/users/create" passHref>
               <Button
                 as="a"
                 size="sm"
@@ -61,99 +60,111 @@ export default function UserList() {
             </Link>
           </Flex>
 
-          <Table colorScheme="whiteAlpha">
-            <Thead>
-              <Tr>
-                <Th px="6" color="gray.300" w="8">
-                  <Checkbox colorScheme="pink" />
-                </Th>
-                <Th>Usuário</Th>
-                {isWideVersion && <Th>Data de cadastro</Th>}
-                <Th w="8"></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td px="6">
-                  <Checkbox colorScheme="pink" />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Lúcio Araújo</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      lucio.ribeiroaraujo@gmail.com
-                    </Text>
-                  </Box>
-                </Td>
-                {isWideVersion && <Td>03 de dezembro, 2023</Td>}
-                <Td>
-                  <Button
-                    as="a"
-                    size="sm"
-                    fontSize="sm"
-                    colorScheme="purple"
-                    leftIcon={<Icon as={RiEditLine} fontSize="16" />}
-                    iconSpacing={!isWideVersion ? 0 : 2}
-                  >
-                    {isWideVersion && "Editar"}
-                  </Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td px="6">
-                  <Checkbox colorScheme="pink" />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Lúcio Araújo</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      lucio.ribeiroaraujo@gmail.com
-                    </Text>
-                  </Box>
-                </Td>
-                {isWideVersion && <Td>03 de dezembro, 2023</Td>}
-                <Td>
-                  <Button
-                    as="a"
-                    size="sm"
-                    fontSize="sm"
-                    colorScheme="purple"
-                    leftIcon={<Icon as={RiEditLine} fontSize="16" />}
-                    iconSpacing={!isWideVersion ? 0 : 2}
-                  >
-                    {isWideVersion && "Editar"}
-                  </Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td px="6">
-                  <Checkbox colorScheme="pink" />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Lúcio Araújo</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      lucio.ribeiroaraujo@gmail.com
-                    </Text>
-                  </Box>
-                </Td>
-                {isWideVersion && <Td>03 de dezembro, 2023</Td>}
-                <Td>
-                  <Button
-                    as="a"
-                    size="sm"
-                    fontSize="sm"
-                    colorScheme="purple"
-                    leftIcon={<Icon as={RiEditLine} fontSize="16" />}
-                    iconSpacing={!isWideVersion ? 0 : 2}
-                  >
-                    {isWideVersion && "Editar"}
-                  </Button>
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
-          <Pagination />
+          {isLoading ? (
+            <Flex justify="center">
+              <Spinner />
+            </Flex>
+          ) : error ? (
+            <Flex justify="center">
+              <Text>Falha!</Text>
+            </Flex>
+          ) : (
+            <>
+              <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th px="6" color="gray.300" w="8">
+                      <Checkbox colorScheme="pink" />
+                    </Th>
+                    <Th>Usuário</Th>
+                    {isWideVersion && <Th>Data de cadastro</Th>}
+                    <Th w="8"></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td px="6">
+                      <Checkbox colorScheme="pink" />
+                    </Td>
+                    <Td>
+                      <Box>
+                        <Text fontWeight="bold">Lúcio Araújo</Text>
+                        <Text fontSize="sm" color="gray.300">
+                          lucio.ribeiroaraujo@gmail.com
+                        </Text>
+                      </Box>
+                    </Td>
+                    {isWideVersion && <Td>03 de dezembro, 2023</Td>}
+                    <Td>
+                      <Button
+                        as="a"
+                        size="sm"
+                        fontSize="sm"
+                        colorScheme="purple"
+                        leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                        iconSpacing={!isWideVersion ? 0 : 2}
+                      >
+                        {isWideVersion && "Editar"}
+                      </Button>
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td px="6">
+                      <Checkbox colorScheme="pink" />
+                    </Td>
+                    <Td>
+                      <Box>
+                        <Text fontWeight="bold">Lúcio Araújo</Text>
+                        <Text fontSize="sm" color="gray.300">
+                          lucio.ribeiroaraujo@gmail.com
+                        </Text>
+                      </Box>
+                    </Td>
+                    {isWideVersion && <Td>03 de dezembro, 2023</Td>}
+                    <Td>
+                      <Button
+                        as="a"
+                        size="sm"
+                        fontSize="sm"
+                        colorScheme="purple"
+                        leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                        iconSpacing={!isWideVersion ? 0 : 2}
+                      >
+                        {isWideVersion && "Editar"}
+                      </Button>
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td px="6">
+                      <Checkbox colorScheme="pink" />
+                    </Td>
+                    <Td>
+                      <Box>
+                        <Text fontWeight="bold">Lúcio Araújo</Text>
+                        <Text fontSize="sm" color="gray.300">
+                          lucio.ribeiroaraujo@gmail.com
+                        </Text>
+                      </Box>
+                    </Td>
+                    {isWideVersion && <Td>03 de dezembro, 2023</Td>}
+                    <Td>
+                      <Button
+                        as="a"
+                        size="sm"
+                        fontSize="sm"
+                        colorScheme="purple"
+                        leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                        iconSpacing={!isWideVersion ? 0 : 2}
+                      >
+                        {isWideVersion && "Editar"}
+                      </Button>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+              <Pagination />
+            </>
+          )}
         </Box>
       </Flex>
     </Flex>
