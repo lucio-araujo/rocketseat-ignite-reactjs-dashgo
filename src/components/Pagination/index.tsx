@@ -6,17 +6,19 @@ interface PaginationProps {
   perPage?: number;
   total: number;
   siblingPages?: number;
+  onPageChange: (page: number) => void;
 }
 
 export function Pagination({
   currentPage,
   perPage = 10,
-  siblingPages = 1,
+  siblingPages = 2,
   total,
+  onPageChange,
 }: PaginationProps) {
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
 
-  const lastPage = Math.floor(total / perPage);
+  const lastPage = Math.ceil(total / perPage);
 
   const previousPages =
     currentPage > 1
@@ -41,10 +43,14 @@ export function Pagination({
       direction={isWideVersion ? "row" : "column"}
     >
       <Box>
-        <strong>0</strong> - <strong>10</strong> de <strong>100</strong>
+        <strong>{(currentPage - 1) * perPage + 1}</strong> -{" "}
+        <strong>{Math.min(currentPage * perPage, total)}</strong> de{" "}
+        <strong>{total}</strong>
       </Box>
       <HStack spacing="2">
-        {currentPage - siblingPages > 1 && <PaginationItem number={1} />}
+        {currentPage - siblingPages > 1 && (
+          <PaginationItem number={1} onPageChange={onPageChange} />
+        )}
 
         {currentPage - siblingPages > 2 && (
           <Text w={4} color="gray.300" align="center">
@@ -53,13 +59,25 @@ export function Pagination({
         )}
 
         {previousPages.map((page) => (
-          <PaginationItem key={page} number={page} />
+          <PaginationItem
+            key={page}
+            number={page}
+            onPageChange={onPageChange}
+          />
         ))}
 
-        <PaginationItem isCurrent number={currentPage} />
+        <PaginationItem
+          isCurrent
+          number={currentPage}
+          onPageChange={onPageChange}
+        />
 
         {nextPages.map((page) => (
-          <PaginationItem key={page} number={page} />
+          <PaginationItem
+            key={page}
+            number={page}
+            onPageChange={onPageChange}
+          />
         ))}
 
         {currentPage + siblingPages < lastPage - 1 && (
@@ -69,7 +87,7 @@ export function Pagination({
         )}
 
         {currentPage + siblingPages < lastPage && (
-          <PaginationItem number={lastPage} />
+          <PaginationItem number={lastPage} onPageChange={onPageChange} />
         )}
       </HStack>
     </Stack>
